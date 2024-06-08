@@ -13,7 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+
+import org.junit.Assert;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class Testcases {
@@ -24,14 +27,22 @@ public class Testcases {
                 Objects.requireNonNull(getClass().getResource("test1.c")).toURI())));
         C c = new C(cCode);
         AbstractSyntaxTree tree = c.parseToAST();
-        Java java = new Java(new Java(tree).generateCode());
-        Rust rust = new Rust(new Rust(tree).generateCode());
+        String javaCode = new Java(tree).generateCode();
+        String rustCode = new Rust(tree).generateCode();
+        System.out.println("C:");
+        System.out.println(cCode);
+        System.out.println("Java:");
+        System.out.println(javaCode);
+        System.out.println("Rust:");
+        System.out.println(rustCode);
+        Java java = new Java(javaCode);
+        Rust rust = new Rust(rustCode);
         Transpiler<Code> transpiler = new Transpiler();
         transpiler.addCode(c);
         transpiler.addCode(java);
         transpiler.addCode(rust);
         List<Code> runnables = transpiler.getSimilarRunnables(c);
-        assertEquals(runnables.size(), 3);
+        Assert.assertEquals(runnables.size(), 3);
     }
 
     @Test
@@ -40,14 +51,22 @@ public class Testcases {
                 Objects.requireNonNull(getClass().getResource("test2.j")).toURI())));
         Java java = new Java(javaCode);
         AbstractSyntaxTree tree = java.parseToAST();
-        C c = new C(new C(tree).generateCode());
-        Rust rust = new Rust(new Rust(tree).generateCode());
+        String cCode = new C(tree).generateCode();
+        String rustCode = new Rust(tree).generateCode();
+        System.out.println("C:");
+        System.out.println(cCode);
+        System.out.println("Java:");
+        System.out.println(javaCode);
+        System.out.println("Rust:");
+        System.out.println(rustCode);
+        C c = new C(cCode);
+        Rust rust = new Rust(rustCode);
         Transpiler<Code> transpiler = new Transpiler();
         transpiler.addCode(c);
         transpiler.addCode(java);
         transpiler.addCode(rust);
         List<Code> runnables = transpiler.getSimilarRunnables(c);
-        assertEquals(runnables.size(), 3);
+        Assert.assertEquals(runnables.size(), 3);
     }
 
     @Test
@@ -56,14 +75,22 @@ public class Testcases {
                 Objects.requireNonNull(getClass().getResource("test3.rs")).toURI())));
         Rust rust = new Rust(rustCode);
         AbstractSyntaxTree tree = rust.parseToAST();
-        Java java = new Java(new Java(tree).generateCode());
-        C c = new C(new C(tree).generateCode());
+        String cCode = new C(tree).generateCode();
+        String javaCode = new Java(tree).generateCode();
+        System.out.println("C:");
+        System.out.println(cCode);
+        System.out.println("Java:");
+        System.out.println(javaCode);
+        System.out.println("Rust:");
+        System.out.println(rustCode);
+        Java java = new Java(javaCode);
+        C c = new C(cCode);
         Transpiler<Code> transpiler = new Transpiler();
         transpiler.addCode(c);
         transpiler.addCode(java);
         transpiler.addCode(rust);
         List<Code> runnables = transpiler.getSimilarRunnables(c);
-        assertEquals(runnables.size(), 3);
+        Assert.assertEquals(runnables.size(), 3);
     }
 
     @Test
@@ -77,12 +104,23 @@ public class Testcases {
         C c = new C(cCode);
         Java java = new Java(javaCode);
         Rust rust = new Rust(rustCode);
+        System.out.println("C:");
+        System.out.println(cCode);
+        System.out.println("Java:");
+        System.out.println(javaCode);
+        System.out.println("Rust:");
+        System.out.println(rustCode);
+        AbstractSyntaxTree cTree = c.parseToAST();
+        AbstractSyntaxTree javaTree = java.parseToAST();
+        AbstractSyntaxTree rustTree = rust.parseToAST();
         Transpiler<Code> transpiler = new Transpiler();
         transpiler.addCode(c);
         transpiler.addCode(java);
         transpiler.addCode(rust);
         List<Code> uniques = transpiler.getUniqueRunnables();
-        assertEquals(c.parseToAST(), java.parseToAST());
-        assertEquals(uniques.size(), 1);
+        Assert.assertEquals(cTree, javaTree);
+        Assert.assertEquals(cTree, rustTree);
+        Assert.assertEquals(javaTree, rustTree);
+        Assert.assertEquals(1, uniques.size());
     }
 }

@@ -24,5 +24,5 @@ public enum RuleType {
     NEGATIVE,
     PAR,
     VARIABLE,
-    CONSTANT,
+    CONSTANT;
 }

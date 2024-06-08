@@ -28,8 +28,7 @@ public enum NodeType {
     PRIMARY("primary"),
     ID("id"),
     NUM("num"),
-    OPTIONS("options"),
-    ;
+    OPTIONS("options");
 
     public final String label;
 

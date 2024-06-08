@@ -9,6 +9,22 @@ public class AbstractSyntaxTree {
     private String lexeme;
     private List<AbstractSyntaxTree> children = new ArrayList<>();
 
+    public NodeType getType() {
+        return type;
+    }
+
+    public RuleType getSubType() {
+        return subType;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+
+    public List<AbstractSyntaxTree> getChildren() {
+        return children;
+    }
+
     protected AbstractSyntaxTree clone() {
         AbstractSyntaxTree ast = new AbstractSyntaxTree(this.type, this.lexeme);
         ast.subType = this.subType;
